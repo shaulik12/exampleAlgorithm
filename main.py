@@ -3,7 +3,6 @@ import pytesseract
 import json
 import math
 import sys
-import io
 import os
 
 def OCR(ioPath):
@@ -14,8 +13,8 @@ def OCR(ioPath):
 
 def getDimentions(ioPath):
     image = Image.open(ioPath+"/input.png")
-    width, height = image.size
-    return width, height
+    [width, height] = image.size
+    return [width, height]
 
 def createOutput(text, imageWidth, imageHeight):
     output = {"data": []}
@@ -29,7 +28,7 @@ def createOutput(text, imageWidth, imageHeight):
         annotation["startY"] = heightAcc
         heightAcc += height
         annotation["endX"] = heightAcc
-        annotation["endX"] = width
+        annotation["endY"] = width
         output["data"].append(annotation)
     return output
 
@@ -46,12 +45,14 @@ def writeOutput(output, ioPath):
     with open(outputfile, 'w') as file:
         json.dump(output, file, indent=4)
 
+
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print("Please provide the path string as an argument.")
         sys.exit(1)
+        
     ioPath = sys.argv[1]
     text = OCR(ioPath)
-    imageWidth, imageHeight = getDimentions(ioPath)
+    [imageWidth, imageHeight] = getDimentions(ioPath)
     output = createOutput(text, imageWidth, imageHeight)
     writeOutput(output, ioPath)
