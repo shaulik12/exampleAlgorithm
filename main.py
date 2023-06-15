@@ -22,21 +22,24 @@ def createOutput(text, imageWidth, imageHeight):
     heightAcc = 0
     for paragraph in paragraphs:
         width, height = annotationSize(paragraph, imageWidth, imageHeight)
-        annotation = {}
-        annotation["content"] = paragraph
-        annotation["startX"] = 0
-        annotation["startY"] = heightAcc
-        heightAcc += height
-        annotation["endX"] = heightAcc
-        annotation["endY"] = width
-        output["data"].append(annotation)
+        if width != 0:
+            annotation = {}
+            annotation["content"] = paragraph
+            annotation["startX"] = 0
+            annotation["startY"] = heightAcc
+            heightAcc += height
+            annotation["endX"] = heightAcc
+            annotation["endY"] = width
+            output["data"].append(annotation)
     return output
 
 def annotationSize(content : str, imageWidth, imageHeight):
     length = len(content)
+    if length == 0:
+        return 0, 0
     textSquareBLockLength = round(math.sqrt(length))
     width = min(textSquareBLockLength, imageWidth)
-    height = round(length/width)
+    height = round(length / width)
     return width, height
     
 
