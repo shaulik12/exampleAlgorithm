@@ -9,32 +9,35 @@ def OCR(ioPath):
     image = Image.open(ioPath+"/input.png")
     greyscale = image.convert('L')
     text = pytesseract.image_to_string(greyscale)
+    image.close
     return text
 
 def getDimentions(ioPath):
     image = Image.open(ioPath+"/input.png")
     [width, height] = image.size
+    image.close
     return [width, height]
 
 def createOutput(text, imageWidth, imageHeight):
     output = {"data": []}
     paragraphs = text.split("\n\n")
-    heightAcc = 0
+    heightAcc = 10
     for paragraph in paragraphs:
         width, height = annotationSize(paragraph, imageWidth, imageHeight)
         if width != 0:
             annotation = {}
             annotation["content"] = paragraph
-            annotation["startX"] = 0
+            annotation["startX"] = (imageWidth - width) / 2
             annotation["startY"] = heightAcc
             heightAcc += height
-            annotation["endX"] = heightAcc
-            annotation["endY"] = width
+            annotation["endX"] = annotation["startX"] + width
+            annotation["endY"] = heightAcc
             output["data"].append(annotation)
+            heightAcc += 10
     return output
 
 def annotationSize(content : str, imageWidth, imageHeight):
-    length = len(content)
+    length = len(content) * 10
     if length == 0:
         return 0, 0
     textSquareBLockLength = round(math.sqrt(length))
