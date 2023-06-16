@@ -36,14 +36,24 @@ def createOutput(text, imageWidth, imageHeight):
             heightAcc += 10
     return output
 
+    """textHeight = X, textWidth = 2X, annotationSquare = 2X^2
+    characterSize = 25x25, characterCount = len, textLineSize = 625len
+    both areas must equal so 2X^2=625len -> X=
+    """
 def annotationSize(content : str, imageWidth, imageHeight):
-    length = len(content) * 10
-    if length == 0:
+    charSquareSize = 25 * 25
+    charCount = len(content)
+    textLineSize = charSquareSize * charCount
+    
+    if charCount == 0:
         return 0, 0
-    textSquareBLockLength = round(math.sqrt(length))
-    width = min(textSquareBLockLength, imageWidth)
-    height = round(length / width)
-    return width, height
+    
+    annotationHeight = round(math.sqrt(textLineSize / 2))
+    annotationWidth = annotationHeight * 2
+    
+    annotationWidth = min(annotationWidth, imageWidth)
+    annotationHeight = min(annotationHeight, imageHeight)
+    return annotationWidth, annotationHeight
     
 
 def writeOutput(output, ioPath):
