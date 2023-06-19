@@ -41,7 +41,7 @@ def createOutput(text, imageWidth, imageHeight):
     both areas must equal so 2X^2=625len -> X=
     """
 def annotationSize(content : str, imageWidth, imageHeight):
-    charSquareSize = 25 * 15
+    charSquareSize = 25 * 17
     charCount = len(content)
     textLineSize = charSquareSize * charCount
     
